@@ -12,4 +12,4 @@ def pascal_triangle(n):
             prev = triangle[i - 1]
             array[j] = prev[j - 1] + prev[j]
         triangle.append(array)
-    return arraylist
+    return triangle
