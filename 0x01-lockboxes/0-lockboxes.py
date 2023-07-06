@@ -3,14 +3,16 @@
 
 
 def canUnlockAll(boxes):
-    """determines if all the boxes can be opened."""
-    opened_boxes = [False] * len(boxes)
-    opened_boxes[0] = True
-    for num in range(1, len(boxes)):
-        for j in range(0, num):
-            box = boxes[j]
-            if num in box:
-                opened_boxes[num] = True
-            elif (num < len(boxes) - 2 and num in boxes[num + 1]):
-                opened_boxes[num] = True
-    return all(opened_boxes)
+    num_boxes = len(boxes)
+    unlocked = [False] * num_boxes
+    unlocked[0] = True  # The first box is unlocked by default
+
+    queue = [0]  # Start with the first box
+    while queue:
+        current_box = queue.pop(0)
+        for key in boxes[current_box]:
+            if key < num_boxes and not unlocked[key]:
+                unlocked[key] = True
+                queue.append(key)
+
+    return all(unlocked)
