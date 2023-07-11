@@ -15,4 +15,3 @@ def minOperations(n):
             n //= div
         div += 1
     return ops
- 
