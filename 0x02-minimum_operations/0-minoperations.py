@@ -7,9 +7,8 @@ def minOperations(n):
     to result in exactly n H characters in the file"""
     init = "H"
     ops = 1
-    if n > 0:
+    if n > 1:
         for _ in range(n):
-            # ops += 1
             if (ops % 3 == 0):
                 init += init
             else:
