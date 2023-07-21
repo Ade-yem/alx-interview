@@ -1,37 +1,32 @@
 #!/usr/bin/python3
-'''A script that reads stdin line by line and computes metrics'''
+"""reads stdin line by line and computes metrics"""
 
+if __name__ == "__main__":
+    import sys
 
-import sys
+    def print_stats(file_size, stats):
+        """prints the stats"""
+        print(f"File size: {file_size}")
+        for k, v in sorted(stats.items()):
+            if stats[k] > 0:
+                print(f"{k}: {v}")
+            stats[k] = 0
 
-cache = {'200': 0, '301': 0, '400': 0, '401': 0,
-         '403': 0, '404': 0, '405': 0, '500': 0}
-total_size = 0
-counter = 0
-
-try:
-    for line in sys.stdin:
-        line_list = line.split(" ")
-        if len(line_list) > 4:
-            code = line_list[-2]
-            size = int(line_list[-1])
-            if code in cache.keys():
-                cache[code] += 1
-            total_size += size
-            counter += 1
-
-        if counter == 10:
-            counter = 0
-            print('File size: {}'.format(total_size))
-            for key, value in sorted(cache.items()):
-                if value != 0:
-                    print('{}: {}'.format(key, value))
-
-except Exception as err:
-    pass
-
-finally:
-    print('File size: {}'.format(total_size))
-    for key, value in sorted(cache.items()):
-        if value != 0:
-            print('{}: {}'.format(key, value))
+    file_size = 0
+    count = 0
+    stats = {"200": 0, "301": 0, "400": 0, "401": 0,
+             "403": 0, "404": 0, "405": 0, "500": 0}
+    try:
+        for line in sys.stdin:
+            line = line.split()
+            if len(line) != 9:
+                continue
+            code = line[-2]
+            if code in stats.keys():
+                stats[code] += 1
+            file_size += int(line[-1])
+            count += 1
+            if count > 0 and count % 10 == 0:
+                print_stats(file_size, stats)
+    except (IndexError, KeyboardInterrupt) as e:
+        print_stats(file_size, stats)
