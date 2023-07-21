@@ -3,39 +3,37 @@
 
 import sys
 
-
-def print_stats(file_size, stats):
-    """prints the stats"""
-    print(f"File size: {file_size}")
-    for k, v in stats.items():
-        if stats[k] > 0:
-            print(f"{k}: {v}")
-        stats[k] = 0
-
+def print_statistics(total_size, status_codes):
+    print("File size:", total_size)
+    for status_code, count in sorted(status_codes.items()):
+        print(f"{status_code}: {count}")
 
 def main():
-    """entry point"""
-    file_size = 0
-    count = 1
-    codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
-    stats = {"200": 0, "301": 0, "400": 0, "401": 0,
-             "403": 0, "404": 0, "405": 0, "500": 0}
+    total_size = 0
+    status_codes = {}
+
     try:
-        for line in sys.stdin:
-            line = line.split()
-            if len(line) != 9:
+        for i, line in enumerate(sys.stdin, 1):
+            line = line.strip()
+            parts = line.split()
+            if len(parts) != 9 or parts[6].isdigit() is False:
                 continue
-            code = line[7]
-            if code in codes:
-                stats[code] += 1
-            file_size += int(line[8])
-            if count % 10 == 0:
-                print_stats(file_size, stats)
-            count += 1
+            
+            ip_address, _, _, _, _, request, status_code, file_size = parts
+            if request != '"GET /projects/260 HTTP/1.1"':
+                continue
 
-    except (IndexError, KeyboardInterrupt) as e:
-        print_stats(file_size, stats)
+            total_size += int(file_size)
 
+            if status_code in status_codes:
+                status_codes[status_code] += 1
+            else:
+                status_codes[status_code] = 1
+
+            if i % 10 == 0:
+                print_statistics(total_size, status_codes)
+    except KeyboardInterrupt:
+        print_statistics(total_size, status_codes)
 
 if __name__ == "__main__":
     main()
