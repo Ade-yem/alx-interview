@@ -6,10 +6,10 @@ import sys
 
 def print_stats(file_size, stats):
     """prints the stats"""
-    print(f"File size: {file_size}")
+    print("File size: {}".format(file_size))
     for k, v in sorted(stats.items()):
-        if stats[k] > 0:
-            print(f"{k}: {v}")
+        if v > 0:
+            print("{}: {}".format(k, v))
 
 
 total_size = 0
@@ -26,10 +26,10 @@ try:
             stats[code] += 1
         total_size += int(line[-1])
         count += 1
-        if count % 10 == 0:
-            print_stats(total_size, stats)
+        if count == 10:
             count = 0
-except (IndexError, KeyboardInterrupt) as e:
+            print_stats(total_size, stats)
+except KeyboardInterrupt as e:
     pass
 finally:
     print_stats(total_size, stats)
