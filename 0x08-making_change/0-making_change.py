@@ -17,4 +17,3 @@ def makeChange(coins, total):
             if i == coins[-1] and sum + i > total:
                 return -1
     return count
-
