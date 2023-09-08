@@ -7,6 +7,7 @@ players = list(player_choices.keys())
 
 
 def is_prime(num):
+    """checks if number is prime"""
     if num <= 1:
         return False
     if num <= 3 and num > 1:
@@ -22,6 +23,7 @@ def is_prime(num):
 
 
 def lose(round_list):
+    """checks for losers"""
     ind = 0
     lose = False
     index = None
@@ -48,6 +50,7 @@ def lose(round_list):
 
 
 def isWinner(x, nums):
+    """returns the winner"""
     for i in range(x):
         round = nums[i]
         round_list = [x for x in range(1, round + 1)]
